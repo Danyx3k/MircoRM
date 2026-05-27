@@ -8,22 +8,18 @@ public class MuestraEntity {
 	private UUID id;
 	private UUID idPaciente;
 	private UUID idTipoMuestra;
-	private UUID idMedioCultivo;
+	private UUID idSitioAnatomico;
+	private UUID idEstado;
+	private UUID idColaborador;
 	private String numeroLaboratorio;
-	private String origenAnatomico;
+	private String tipoMuestraNombre;
+	private String sitioAnatomicoNombre;
+	private String estadoNombre;
+	private Instant fechaRecepcion;
 	private Instant fechaHoraToma;
-	private Instant fechaHoraRecepcion;
-	private Instant fechaHoraProcesamiento;
-	private String estado;
-	private Integer cantidadMorfotiposBacterianos;
-	private Boolean esContaminada;
-	private String observacionesClinicas;
 	private String observacionesLaboratorio;
-	private UUID idColaboradorRegistra;
-	private UUID idColaboradorProcesa;
 	private Instant fechaCreacion;
 	private Instant fechaActualizacion;
-	private String usuarioActualiza;
 
 	public UUID getId() {
 		return id;
@@ -41,6 +37,10 @@ public class MuestraEntity {
 		this.idPaciente = idPaciente;
 	}
 
+	public UUID getIdSitioAnatomico() {
+		return idSitioAnatomico;
+	}
+
 	public UUID getIdTipoMuestra() {
 		return idTipoMuestra;
 	}
@@ -49,12 +49,24 @@ public class MuestraEntity {
 		this.idTipoMuestra = idTipoMuestra;
 	}
 
-	public UUID getIdMedioCultivo() {
-		return idMedioCultivo;
+	public void setIdSitioAnatomico(UUID idSitioAnatomico) {
+		this.idSitioAnatomico = idSitioAnatomico;
 	}
 
-	public void setIdMedioCultivo(UUID idMedioCultivo) {
-		this.idMedioCultivo = idMedioCultivo;
+	public UUID getIdEstado() {
+		return idEstado;
+	}
+
+	public void setIdEstado(UUID idEstado) {
+		this.idEstado = idEstado;
+	}
+
+	public UUID getIdColaborador() {
+		return idColaborador;
+	}
+
+	public void setIdColaborador(UUID idColaborador) {
+		this.idColaborador = idColaborador;
 	}
 
 	public String getNumeroLaboratorio() {
@@ -65,12 +77,36 @@ public class MuestraEntity {
 		this.numeroLaboratorio = numeroLaboratorio;
 	}
 
-	public String getOrigenAnatomico() {
-		return origenAnatomico;
+	public String getTipoMuestraNombre() {
+		return tipoMuestraNombre;
 	}
 
-	public void setOrigenAnatomico(String origenAnatomico) {
-		this.origenAnatomico = origenAnatomico;
+	public void setTipoMuestraNombre(String tipoMuestraNombre) {
+		this.tipoMuestraNombre = tipoMuestraNombre;
+	}
+
+	public String getSitioAnatomicoNombre() {
+		return sitioAnatomicoNombre;
+	}
+
+	public void setSitioAnatomicoNombre(String sitioAnatomicoNombre) {
+		this.sitioAnatomicoNombre = sitioAnatomicoNombre;
+	}
+
+	public String getEstadoNombre() {
+		return estadoNombre;
+	}
+
+	public void setEstadoNombre(String estadoNombre) {
+		this.estadoNombre = estadoNombre;
+	}
+
+	public Instant getFechaRecepcion() {
+		return fechaRecepcion;
+	}
+
+	public void setFechaRecepcion(Instant fechaRecepcion) {
+		this.fechaRecepcion = fechaRecepcion;
 	}
 
 	public Instant getFechaHoraToma() {
@@ -81,76 +117,12 @@ public class MuestraEntity {
 		this.fechaHoraToma = fechaHoraToma;
 	}
 
-	public Instant getFechaHoraRecepcion() {
-		return fechaHoraRecepcion;
-	}
-
-	public void setFechaHoraRecepcion(Instant fechaHoraRecepcion) {
-		this.fechaHoraRecepcion = fechaHoraRecepcion;
-	}
-
-	public Instant getFechaHoraProcesamiento() {
-		return fechaHoraProcesamiento;
-	}
-
-	public void setFechaHoraProcesamiento(Instant fechaHoraProcesamiento) {
-		this.fechaHoraProcesamiento = fechaHoraProcesamiento;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public Integer getCantidadMorfotiposBacterianos() {
-		return cantidadMorfotiposBacterianos;
-	}
-
-	public void setCantidadMorfotiposBacterianos(Integer cantidadMorfotiposBacterianos) {
-		this.cantidadMorfotiposBacterianos = cantidadMorfotiposBacterianos;
-	}
-
-	public Boolean getEsContaminada() {
-		return esContaminada;
-	}
-
-	public void setEsContaminada(Boolean esContaminada) {
-		this.esContaminada = esContaminada;
-	}
-
-	public String getObservacionesClinicas() {
-		return observacionesClinicas;
-	}
-
-	public void setObservacionesClinicas(String observacionesClinicas) {
-		this.observacionesClinicas = observacionesClinicas;
-	}
-
 	public String getObservacionesLaboratorio() {
 		return observacionesLaboratorio;
 	}
 
 	public void setObservacionesLaboratorio(String observacionesLaboratorio) {
 		this.observacionesLaboratorio = observacionesLaboratorio;
-	}
-
-	public UUID getIdColaboradorRegistra() {
-		return idColaboradorRegistra;
-	}
-
-	public void setIdColaboradorRegistra(UUID idColaboradorRegistra) {
-		this.idColaboradorRegistra = idColaboradorRegistra;
-	}
-
-	public UUID getIdColaboradorProcesa() {
-		return idColaboradorProcesa;
-	}
-
-	public void setIdColaboradorProcesa(UUID idColaboradorProcesa) {
-		this.idColaboradorProcesa = idColaboradorProcesa;
 	}
 
 	public Instant getFechaCreacion() {
@@ -167,13 +139,5 @@ public class MuestraEntity {
 
 	public void setFechaActualizacion(Instant fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
-	}
-
-	public String getUsuarioActualiza() {
-		return usuarioActualiza;
-	}
-
-	public void setUsuarioActualiza(String usuarioActualiza) {
-		this.usuarioActualiza = usuarioActualiza;
 	}
 }

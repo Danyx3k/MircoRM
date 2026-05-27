@@ -1,6 +1,7 @@
 package co.hospital.MicroRM.infrastructure.persistence.controler.advice;
 
 import co.hospital.MicroRM.crossscutting.exception.MicroRMException;
+import co.hospital.MicroRM.crossscutting.messagescatalog.MessagesEnum;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,14 @@ public class MicroRMExceptionHandler {
 			body.put("codigo", "MRM-0000");
 			body.put("mensaje", ex.getUserMessage() != null ? ex.getUserMessage() : "Error");
 		}
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		if (ex.hasCatalogMessageCode()) {
+			MessagesEnum code = ex.getMessageCode();
+			if (code == MessagesEnum.PACIENTE_NO_ENCONTRADO || code == MessagesEnum.MUESTRA_NO_ENCONTRADA) {
+				status = HttpStatus.NOT_FOUND;
+			}
+		}
+		return ResponseEntity.status(status).body(body);
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)

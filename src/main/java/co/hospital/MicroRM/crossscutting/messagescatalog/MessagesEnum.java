@@ -18,6 +18,8 @@ public enum MessagesEnum {
 	PACIENTE_EPS_REQUERIDO("MRM-1013", "La EPS es obligatoria."),
 	PACIENTE_EPS_FORMATO("MRM-1014", "La EPS debe ser alfanumérica (se permiten espacios)."),
 	PACIENTE_REGISTRADO_OK("MRM-1099", "Paciente registrado correctamente."),
+	PACIENTE_NO_ENCONTRADO("MRM-1016", "No existe el paciente indicado."),
+	PACIENTE_ACTUALIZADO_OK("MRM-1017", "Paciente actualizado correctamente."),
 
 	MUESTRA_PACIENTE_REQUERIDO("MRM-2001", "El paciente es obligatorio."),
 	MUESTRA_TIPO_REQUERIDO("MRM-2002", "El tipo de muestra es obligatorio."),
@@ -37,7 +39,9 @@ public enum MessagesEnum {
 	MUESTRA_MEDIO_NO_EXISTE("MRM-2012", "El medio de cultivo no existe."),
 	MUESTRA_NUMERO_LAB_DUPLICADO("MRM-2013", "Ya existe una muestra con ese número de laboratorio."),
 	MUESTRA_CONSECUTIVO_DIARIO_AGOTADO("MRM-2018", "Se alcanzó el máximo de muestras para el día (999)."),
-	MUESTRA_REGISTRADA_OK("MRM-2099", "Muestra registrada correctamente.");
+	MUESTRA_REGISTRADA_OK("MRM-2099", "Muestra registrada correctamente."),
+	MUESTRA_NO_ENCONTRADA("MRM-2019", "No existe la muestra indicada."),
+	MUESTRA_ACTUALIZADA_OK("MRM-2020", "Muestra actualizada correctamente.");
 
 	private final String code;
 	private final String defaultMessage;

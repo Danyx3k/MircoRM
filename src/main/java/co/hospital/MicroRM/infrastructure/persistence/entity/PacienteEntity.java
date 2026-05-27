@@ -7,15 +7,16 @@ import java.util.UUID;
 public class PacienteEntity {
 
 	private UUID id;
-	private String identificacion;
+	private String numeroIdentificacion;
+	private UUID idTipoDocumento;
+	private UUID idSexo;
+	private UUID idEps;
 	private String nombre;
 	private String apellido;
 	private LocalDate fechaNacimiento;
-	private String genero;
-	private String telefono;
-	private String email;
-	private String epsSeguro;
-	private String observacionesClinicas;
+	private String celular;
+	private String correo;
+	private String observacionClinica;
 	private Instant fechaCreacion;
 	private Instant fechaActualizacion;
 
@@ -27,12 +28,36 @@ public class PacienteEntity {
 		this.id = id;
 	}
 
-	public String getIdentificacion() {
-		return identificacion;
+	public String getNumeroIdentificacion() {
+		return numeroIdentificacion;
 	}
 
-	public void setIdentificacion(String identificacion) {
-		this.identificacion = identificacion;
+	public void setNumeroIdentificacion(String numeroIdentificacion) {
+		this.numeroIdentificacion = numeroIdentificacion;
+	}
+
+	public UUID getIdTipoDocumento() {
+		return idTipoDocumento;
+	}
+
+	public void setIdTipoDocumento(UUID idTipoDocumento) {
+		this.idTipoDocumento = idTipoDocumento;
+	}
+
+	public UUID getIdSexo() {
+		return idSexo;
+	}
+
+	public void setIdSexo(UUID idSexo) {
+		this.idSexo = idSexo;
+	}
+
+	public UUID getIdEps() {
+		return idEps;
+	}
+
+	public void setIdEps(UUID idEps) {
+		this.idEps = idEps;
 	}
 
 	public String getNombre() {
@@ -59,44 +84,28 @@ public class PacienteEntity {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
-	public String getGenero() {
-		return genero;
+	public String getCelular() {
+		return celular;
 	}
 
-	public void setGenero(String genero) {
-		this.genero = genero;
+	public void setCelular(String celular) {
+		this.celular = celular;
 	}
 
-	public String getTelefono() {
-		return telefono;
+	public String getCorreo() {
+		return correo;
 	}
 
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
+	public void setCorreo(String correo) {
+		this.correo = correo;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getObservacionClinica() {
+		return observacionClinica;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getEpsSeguro() {
-		return epsSeguro;
-	}
-
-	public void setEpsSeguro(String epsSeguro) {
-		this.epsSeguro = epsSeguro;
-	}
-
-	public String getObservacionesClinicas() {
-		return observacionesClinicas;
-	}
-
-	public void setObservacionesClinicas(String observacionesClinicas) {
-		this.observacionesClinicas = observacionesClinicas;
+	public void setObservacionClinica(String observacionClinica) {
+		this.observacionClinica = observacionClinica;
 	}
 
 	public Instant getFechaCreacion() {

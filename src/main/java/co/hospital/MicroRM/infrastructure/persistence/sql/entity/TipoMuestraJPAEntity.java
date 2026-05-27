@@ -5,27 +5,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "tipos_muestra")
+@Table(name = "tipo_muestra")
 public class TipoMuestraJPAEntity {
 
 	@Id
 	@Column(name = "id_tipo_muestra")
 	private UUID idTipoMuestra;
 
-	@Column(nullable = false, unique = true, length = 120)
+	@Column(nullable = false, unique = true, length = 100)
 	private String nombre;
 
-	@Column(nullable = false, unique = true, length = 40)
-	private String codigo;
-
-	@Column(name = "tiempo_incubacion_horas", nullable = false)
-	private Integer tiempoIncubacionHoras;
-
-	@Column(columnDefinition = "text")
-	private String descripcion;
+	@Column(name = "fecha_creacion")
+	private Instant fechaCreacion;
 
 	public UUID getIdTipoMuestra() {
 		return idTipoMuestra;
@@ -43,27 +38,11 @@ public class TipoMuestraJPAEntity {
 		this.nombre = nombre;
 	}
 
-	public String getCodigo() {
-		return codigo;
+	public Instant getFechaCreacion() {
+		return fechaCreacion;
 	}
 
-	public void setCodigo(String codigo) {
-		this.codigo = codigo;
-	}
-
-	public Integer getTiempoIncubacionHoras() {
-		return tiempoIncubacionHoras;
-	}
-
-	public void setTiempoIncubacionHoras(Integer tiempoIncubacionHoras) {
-		this.tiempoIncubacionHoras = tiempoIncubacionHoras;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setFechaCreacion(Instant fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
 	}
 }

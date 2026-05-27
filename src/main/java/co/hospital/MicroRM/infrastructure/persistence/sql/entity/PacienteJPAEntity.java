@@ -2,7 +2,10 @@ package co.hospital.MicroRM.infrastructure.persistence.sql.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -12,45 +15,58 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "pacientes")
+@Table(name = "paciente")
 public class PacienteJPAEntity {
 
 	@Id
 	@Column(name = "id_paciente", nullable = false)
 	private UUID idPaciente;
 
-	@Column(name = "identificacion", nullable = false, unique = true, length = 15)
-	private String identificacion;
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id_tipo_documento", nullable = false)
+	private TipoDocumentoJPAEntity tipoDocumento;
 
-	@Column(name = "nombre", nullable = false, length = 20)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id_sexo", nullable = false)
+	private SexoJPAEntity sexo;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id_eps", nullable = false)
+	private EpsJPAEntity eps;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_colaborador_registra")
+	private ColaboradorJPAEntity colaboradorRegistra;
+
+	@Column(nullable = false, length = 100)
 	private String nombre;
 
-	@Column(name = "apellido", nullable = false, length = 20)
+	@Column(nullable = false, length = 100)
 	private String apellido;
+
+	@Column(name = "numero_identificacion", nullable = false, unique = true, length = 20)
+	private String numeroIdentificacion;
+
+	@Column(length = 15)
+	private String celular;
+
+	@Column(length = 100)
+	private String correo;
 
 	@Column(name = "fecha_nacimiento", nullable = false)
 	private LocalDate fechaNacimiento;
 
-	@Column(name = "genero", nullable = false, length = 20)
-	private String genero;
-
-	@Column(name = "telefono", length = 30)
-	private String telefono;
-
-	@Column(name = "email", length = 160)
-	private String email;
-
-	@Column(name = "eps_seguro", nullable = false, length = 120)
-	private String epsSeguro;
-
-	@Column(name = "observaciones_clinicas", columnDefinition = "text")
-	private String observacionesClinicas;
+	@Column(name = "observacion_clinica", columnDefinition = "text")
+	private String observacionClinica;
 
 	@Column(name = "fecha_creacion", nullable = false)
 	private Instant fechaCreacion;
 
 	@Column(name = "fecha_actualizacion", nullable = false)
 	private Instant fechaActualizacion;
+
+	@Column(name = "usuario_crea", length = 100)
+	private String usuarioCrea;
 
 	@PrePersist
 	void onCreate() {
@@ -74,12 +90,36 @@ public class PacienteJPAEntity {
 		this.idPaciente = idPaciente;
 	}
 
-	public String getIdentificacion() {
-		return identificacion;
+	public TipoDocumentoJPAEntity getTipoDocumento() {
+		return tipoDocumento;
 	}
 
-	public void setIdentificacion(String identificacion) {
-		this.identificacion = identificacion;
+	public void setTipoDocumento(TipoDocumentoJPAEntity tipoDocumento) {
+		this.tipoDocumento = tipoDocumento;
+	}
+
+	public SexoJPAEntity getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(SexoJPAEntity sexo) {
+		this.sexo = sexo;
+	}
+
+	public EpsJPAEntity getEps() {
+		return eps;
+	}
+
+	public void setEps(EpsJPAEntity eps) {
+		this.eps = eps;
+	}
+
+	public ColaboradorJPAEntity getColaboradorRegistra() {
+		return colaboradorRegistra;
+	}
+
+	public void setColaboradorRegistra(ColaboradorJPAEntity colaboradorRegistra) {
+		this.colaboradorRegistra = colaboradorRegistra;
 	}
 
 	public String getNombre() {
@@ -98,6 +138,30 @@ public class PacienteJPAEntity {
 		this.apellido = apellido;
 	}
 
+	public String getNumeroIdentificacion() {
+		return numeroIdentificacion;
+	}
+
+	public void setNumeroIdentificacion(String numeroIdentificacion) {
+		this.numeroIdentificacion = numeroIdentificacion;
+	}
+
+	public String getCelular() {
+		return celular;
+	}
+
+	public void setCelular(String celular) {
+		this.celular = celular;
+	}
+
+	public String getCorreo() {
+		return correo;
+	}
+
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+
 	public LocalDate getFechaNacimiento() {
 		return fechaNacimiento;
 	}
@@ -106,44 +170,12 @@ public class PacienteJPAEntity {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
-	public String getGenero() {
-		return genero;
+	public String getObservacionClinica() {
+		return observacionClinica;
 	}
 
-	public void setGenero(String genero) {
-		this.genero = genero;
-	}
-
-	public String getTelefono() {
-		return telefono;
-	}
-
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getEpsSeguro() {
-		return epsSeguro;
-	}
-
-	public void setEpsSeguro(String epsSeguro) {
-		this.epsSeguro = epsSeguro;
-	}
-
-	public String getObservacionesClinicas() {
-		return observacionesClinicas;
-	}
-
-	public void setObservacionesClinicas(String observacionesClinicas) {
-		this.observacionesClinicas = observacionesClinicas;
+	public void setObservacionClinica(String observacionClinica) {
+		this.observacionClinica = observacionClinica;
 	}
 
 	public Instant getFechaCreacion() {
@@ -160,5 +192,13 @@ public class PacienteJPAEntity {
 
 	public void setFechaActualizacion(Instant fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public String getUsuarioCrea() {
+		return usuarioCrea;
+	}
+
+	public void setUsuarioCrea(String usuarioCrea) {
+		this.usuarioCrea = usuarioCrea;
 	}
 }

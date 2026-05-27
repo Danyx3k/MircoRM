@@ -3,67 +3,60 @@ package co.hospital.MicroRM.features.paciente.registernewpatient.application.use
 import co.hospital.MicroRM.infrastructure.persistence.mapper.dto.RegisterPacienteRequest;
 
 import java.time.LocalDate;
-import java.util.Locale;
 import java.util.UUID;
 
-/**
- * Dominio del caso de uso registrar paciente (equivalente a {@code RegisterNewStudentDomain} en UcoParking).
- */
 public final class RegisterNewPatientDomain {
 
 	private final UUID id;
-	private final String identificacion;
+	private final String numeroIdentificacion;
 	private final String nombre;
 	private final String apellido;
 	private final LocalDate fechaNacimiento;
-	private final String genero;
-	private final String telefono;
-	private final String email;
-	private final String epsSeguro;
-	private final String observacionesClinicas;
+	private final String codigoTipoDocumento;
+	private final String sexo;
+	private final String codigoEps;
+	private final String celular;
+	private final String correo;
+	private final String observacionClinica;
 
 	private RegisterNewPatientDomain(
 			UUID id,
-			String identificacion,
+			String numeroIdentificacion,
 			String nombre,
 			String apellido,
 			LocalDate fechaNacimiento,
-			String genero,
-			String telefono,
-			String email,
-			String epsSeguro,
-			String observacionesClinicas) {
+			String codigoTipoDocumento,
+			String sexo,
+			String codigoEps,
+			String celular,
+			String correo,
+			String observacionClinica) {
 		this.id = id;
-		this.identificacion = identificacion;
+		this.numeroIdentificacion = numeroIdentificacion;
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.fechaNacimiento = fechaNacimiento;
-		this.genero = genero;
-		this.telefono = telefono;
-		this.email = email;
-		this.epsSeguro = epsSeguro;
-		this.observacionesClinicas = observacionesClinicas;
+		this.codigoTipoDocumento = codigoTipoDocumento;
+		this.sexo = sexo;
+		this.codigoEps = codigoEps;
+		this.celular = celular;
+		this.correo = correo;
+		this.observacionClinica = observacionClinica;
 	}
 
 	public static RegisterNewPatientDomain from(RegisterPacienteRequest request) {
 		return new RegisterNewPatientDomain(
 				UUID.randomUUID(),
-				trim(request.identificacion()),
+				trim(request.numeroIdentificacion()),
 				trim(request.nombre()),
 				trim(request.apellido()),
 				request.fechaNacimiento(),
-				normalizeGenero(request.genero()),
-				emptyToNull(trimNullable(request.telefono())),
-				trim(request.email()),
-				trim(request.epsSeguro()),
-				emptyToNull(trimNullable(request.observacionesClinicas())));
-	}
-
-	private static String normalizeGenero(String genero) {
-		if (genero == null) {
-			return null;
-		}
-		return genero.trim().toUpperCase(Locale.ROOT);
+				trim(request.codigoTipoDocumento()),
+				trim(request.sexo()),
+				trim(request.codigoEps()),
+				emptyToNull(trimNullable(request.celular())),
+				emptyToNull(trimNullable(request.correo())),
+				emptyToNull(trimNullable(request.observacionClinica())));
 	}
 
 	private static String trim(String value) {
@@ -85,8 +78,8 @@ public final class RegisterNewPatientDomain {
 		return id;
 	}
 
-	public String getIdentificacion() {
-		return identificacion;
+	public String getNumeroIdentificacion() {
+		return numeroIdentificacion;
 	}
 
 	public String getNombre() {
@@ -101,23 +94,27 @@ public final class RegisterNewPatientDomain {
 		return fechaNacimiento;
 	}
 
-	public String getGenero() {
-		return genero;
+	public String getCodigoTipoDocumento() {
+		return codigoTipoDocumento;
 	}
 
-	public String getTelefono() {
-		return telefono;
+	public String getSexo() {
+		return sexo;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getCodigoEps() {
+		return codigoEps;
 	}
 
-	public String getEpsSeguro() {
-		return epsSeguro;
+	public String getCelular() {
+		return celular;
 	}
 
-	public String getObservacionesClinicas() {
-		return observacionesClinicas;
+	public String getCorreo() {
+		return correo;
+	}
+
+	public String getObservacionClinica() {
+		return observacionClinica;
 	}
 }

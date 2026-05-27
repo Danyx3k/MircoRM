@@ -14,7 +14,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "muestras")
+@Table(name = "muestra")
 public class MuestraJPAEntity {
 
 	@Id
@@ -22,56 +22,34 @@ public class MuestraJPAEntity {
 	private UUID idMuestra;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_paciente", nullable = false)
-	private PacienteJPAEntity paciente;
-
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_tipo_muestra", nullable = false)
 	private TipoMuestraJPAEntity tipoMuestra;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_medio_cultivo", nullable = false)
-	private MedioCultivoJPAEntity medioCultivo;
+	@JoinColumn(name = "id_sitio_anatomico", nullable = false)
+	private SitioAnatomicoJPAEntity sitioAnatomico;
 
-	@Column(name = "numero_laboratorio", nullable = false, unique = true, length = 40)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id_estado", nullable = false)
+	private EstadoJPAEntity estado;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id_colaborador", nullable = false)
+	private ColaboradorJPAEntity colaborador;
+
+	@Column(name = "numero_laboratorio", unique = true, length = 10)
 	private String numeroLaboratorio;
 
-	@Column(name = "origen_anatomico", nullable = false, length = 200)
-	private String origenAnatomico;
+	@Column(name = "fecha_recepcion")
+	private Instant fechaRecepcion;
 
-	@Column(name = "fecha_hora_toma", nullable = false)
+	@Column(name = "fecha_hora_toma")
 	private Instant fechaHoraToma;
-
-	@Column(name = "fecha_hora_recepcion")
-	private Instant fechaHoraRecepcion;
-
-	@Column(name = "fecha_hora_procesamiento")
-	private Instant fechaHoraProcesamiento;
-
-	@Column(nullable = false, length = 30)
-	private String estado;
-
-	@Column(name = "cantidad_morfotipos_bacterianos", nullable = false)
-	private Integer cantidadMorfotiposBacterianos;
-
-	@Column(name = "es_contaminada", nullable = false)
-	private Boolean esContaminada = false;
-
-	@Column(name = "observaciones_clinicas", columnDefinition = "text")
-	private String observacionesClinicas;
 
 	@Column(name = "observaciones_laboratorio", columnDefinition = "text")
 	private String observacionesLaboratorio;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_colaborador_registra", nullable = false)
-	private ColaboradorJPAEntity colaboradorRegistra;
-
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "id_colaborador_procesa", nullable = false)
-	private ColaboradorJPAEntity colaboradorProcesa;
-
-	@Column(name = "usuario_registra", length = 120)
+	@Column(name = "usuario_registra", length = 100)
 	private String usuarioRegistra;
 
 	@Column(name = "fecha_creacion", nullable = false)
@@ -80,7 +58,10 @@ public class MuestraJPAEntity {
 	@Column(name = "fecha_actualizacion", nullable = false)
 	private Instant fechaActualizacion;
 
-	@Column(name = "usuario_actualiza", length = 120)
+	@Column(name = "usuario_crea", length = 100)
+	private String usuarioCrea;
+
+	@Column(name = "usuario_actualiza", length = 100)
 	private String usuarioActualiza;
 
 	@PrePersist
@@ -88,6 +69,9 @@ public class MuestraJPAEntity {
 		Instant now = Instant.now();
 		if (fechaCreacion == null) {
 			fechaCreacion = now;
+		}
+		if (fechaRecepcion == null) {
+			fechaRecepcion = now;
 		}
 		fechaActualizacion = now;
 	}
@@ -105,14 +89,6 @@ public class MuestraJPAEntity {
 		this.idMuestra = idMuestra;
 	}
 
-	public PacienteJPAEntity getPaciente() {
-		return paciente;
-	}
-
-	public void setPaciente(PacienteJPAEntity paciente) {
-		this.paciente = paciente;
-	}
-
 	public TipoMuestraJPAEntity getTipoMuestra() {
 		return tipoMuestra;
 	}
@@ -121,12 +97,28 @@ public class MuestraJPAEntity {
 		this.tipoMuestra = tipoMuestra;
 	}
 
-	public MedioCultivoJPAEntity getMedioCultivo() {
-		return medioCultivo;
+	public SitioAnatomicoJPAEntity getSitioAnatomico() {
+		return sitioAnatomico;
 	}
 
-	public void setMedioCultivo(MedioCultivoJPAEntity medioCultivo) {
-		this.medioCultivo = medioCultivo;
+	public void setSitioAnatomico(SitioAnatomicoJPAEntity sitioAnatomico) {
+		this.sitioAnatomico = sitioAnatomico;
+	}
+
+	public EstadoJPAEntity getEstado() {
+		return estado;
+	}
+
+	public void setEstado(EstadoJPAEntity estado) {
+		this.estado = estado;
+	}
+
+	public ColaboradorJPAEntity getColaborador() {
+		return colaborador;
+	}
+
+	public void setColaborador(ColaboradorJPAEntity colaborador) {
+		this.colaborador = colaborador;
 	}
 
 	public String getNumeroLaboratorio() {
@@ -137,12 +129,12 @@ public class MuestraJPAEntity {
 		this.numeroLaboratorio = numeroLaboratorio;
 	}
 
-	public String getOrigenAnatomico() {
-		return origenAnatomico;
+	public Instant getFechaRecepcion() {
+		return fechaRecepcion;
 	}
 
-	public void setOrigenAnatomico(String origenAnatomico) {
-		this.origenAnatomico = origenAnatomico;
+	public void setFechaRecepcion(Instant fechaRecepcion) {
+		this.fechaRecepcion = fechaRecepcion;
 	}
 
 	public Instant getFechaHoraToma() {
@@ -153,76 +145,12 @@ public class MuestraJPAEntity {
 		this.fechaHoraToma = fechaHoraToma;
 	}
 
-	public Instant getFechaHoraRecepcion() {
-		return fechaHoraRecepcion;
-	}
-
-	public void setFechaHoraRecepcion(Instant fechaHoraRecepcion) {
-		this.fechaHoraRecepcion = fechaHoraRecepcion;
-	}
-
-	public Instant getFechaHoraProcesamiento() {
-		return fechaHoraProcesamiento;
-	}
-
-	public void setFechaHoraProcesamiento(Instant fechaHoraProcesamiento) {
-		this.fechaHoraProcesamiento = fechaHoraProcesamiento;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public Integer getCantidadMorfotiposBacterianos() {
-		return cantidadMorfotiposBacterianos;
-	}
-
-	public void setCantidadMorfotiposBacterianos(Integer cantidadMorfotiposBacterianos) {
-		this.cantidadMorfotiposBacterianos = cantidadMorfotiposBacterianos;
-	}
-
-	public Boolean getEsContaminada() {
-		return esContaminada;
-	}
-
-	public void setEsContaminada(Boolean esContaminada) {
-		this.esContaminada = esContaminada;
-	}
-
-	public String getObservacionesClinicas() {
-		return observacionesClinicas;
-	}
-
-	public void setObservacionesClinicas(String observacionesClinicas) {
-		this.observacionesClinicas = observacionesClinicas;
-	}
-
 	public String getObservacionesLaboratorio() {
 		return observacionesLaboratorio;
 	}
 
 	public void setObservacionesLaboratorio(String observacionesLaboratorio) {
 		this.observacionesLaboratorio = observacionesLaboratorio;
-	}
-
-	public ColaboradorJPAEntity getColaboradorRegistra() {
-		return colaboradorRegistra;
-	}
-
-	public void setColaboradorRegistra(ColaboradorJPAEntity colaboradorRegistra) {
-		this.colaboradorRegistra = colaboradorRegistra;
-	}
-
-	public ColaboradorJPAEntity getColaboradorProcesa() {
-		return colaboradorProcesa;
-	}
-
-	public void setColaboradorProcesa(ColaboradorJPAEntity colaboradorProcesa) {
-		this.colaboradorProcesa = colaboradorProcesa;
 	}
 
 	public String getUsuarioRegistra() {
@@ -247,6 +175,14 @@ public class MuestraJPAEntity {
 
 	public void setFechaActualizacion(Instant fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public String getUsuarioCrea() {
+		return usuarioCrea;
+	}
+
+	public void setUsuarioCrea(String usuarioCrea) {
+		this.usuarioCrea = usuarioCrea;
 	}
 
 	public String getUsuarioActualiza() {
