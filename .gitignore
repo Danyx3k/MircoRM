@@ -30,3 +30,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Docker (credenciales locales) ###
+docker/.env
+
+### Referencia local UcoParking (no versionar) ###
+_ref_ucoparking/
