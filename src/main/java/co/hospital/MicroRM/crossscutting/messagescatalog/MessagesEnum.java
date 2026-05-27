@@ -41,7 +41,10 @@ public enum MessagesEnum {
 	MUESTRA_CONSECUTIVO_DIARIO_AGOTADO("MRM-2018", "Se alcanzó el máximo de muestras para el día (999)."),
 	MUESTRA_REGISTRADA_OK("MRM-2099", "Muestra registrada correctamente."),
 	MUESTRA_NO_ENCONTRADA("MRM-2019", "No existe la muestra indicada."),
-	MUESTRA_ACTUALIZADA_OK("MRM-2020", "Muestra actualizada correctamente.");
+	MUESTRA_ACTUALIZADA_OK("MRM-2020", "Muestra actualizada correctamente."),
+
+	COLABORADOR_NO_AUTORIZADO("MRM-3001",
+			"Usuario no autorizado. Debe iniciar sesión con un colaborador activo registrado en el laboratorio.");
 
 	private final String code;
 	private final String defaultMessage;

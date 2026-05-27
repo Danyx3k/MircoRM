@@ -11,4 +11,6 @@ public interface ColaboradorJpaRepository extends JpaRepository<ColaboradorJPAEn
 	Optional<ColaboradorJPAEntity> findFirstByActivoTrueOrderByFechaCreacionAsc();
 
 	boolean existsByIdColaboradorAndActivoTrue(UUID idColaborador);
+
+	Optional<ColaboradorJPAEntity> findByCorreoElectronicoIgnoreCaseAndActivoTrue(String correoElectronico);
 }

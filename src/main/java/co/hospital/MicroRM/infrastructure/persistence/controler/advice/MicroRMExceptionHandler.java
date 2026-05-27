@@ -33,6 +33,8 @@ public class MicroRMExceptionHandler {
 			MessagesEnum code = ex.getMessageCode();
 			if (code == MessagesEnum.PACIENTE_NO_ENCONTRADO || code == MessagesEnum.MUESTRA_NO_ENCONTRADA) {
 				status = HttpStatus.NOT_FOUND;
+			} else if (code == MessagesEnum.COLABORADOR_NO_AUTORIZADO) {
+				status = HttpStatus.FORBIDDEN;
 			}
 		}
 		return ResponseEntity.status(status).body(body);
