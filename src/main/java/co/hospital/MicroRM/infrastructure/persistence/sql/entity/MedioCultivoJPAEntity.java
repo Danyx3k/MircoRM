@@ -5,8 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Catálogo alineado con {@code microlab.medios_cultivo} (temperatura de incubación, no {@code temperatura_celsius}).
+ */
 @Entity
 @Table(name = "medios_cultivo")
 public class MedioCultivoJPAEntity {
@@ -21,8 +25,11 @@ public class MedioCultivoJPAEntity {
 	@Column(nullable = false, unique = true, length = 40)
 	private String codigo;
 
-	@Column(name = "temperatura_celsius", nullable = false)
-	private Float temperaturaCelsius;
+	@Column(name = "agar_tipo", length = 120)
+	private String agarTipo;
+
+	@Column(name = "temperatura_incubacion", nullable = false)
+	private Float temperaturaIncubacion;
 
 	@Column(name = "tiempo_incubacion_horas", nullable = false)
 	private Integer tiempoIncubacionHoras;
@@ -30,8 +37,17 @@ public class MedioCultivoJPAEntity {
 	@Column(columnDefinition = "text")
 	private String composicion;
 
-	@Column(name = "agar_tipo", length = 120)
-	private String agarTipo;
+	@Column(length = 200)
+	private String proveedor;
+
+	@Column(nullable = false)
+	private Boolean activo;
+
+	@Column(name = "fecha_creacion", nullable = false)
+	private Instant fechaCreacion;
+
+	@Column(name = "fecha_actualizacion", nullable = false)
+	private Instant fechaActualizacion;
 
 	public UUID getIdMedioCultivo() {
 		return idMedioCultivo;
@@ -57,12 +73,20 @@ public class MedioCultivoJPAEntity {
 		this.codigo = codigo;
 	}
 
-	public Float getTemperaturaCelsius() {
-		return temperaturaCelsius;
+	public String getAgarTipo() {
+		return agarTipo;
 	}
 
-	public void setTemperaturaCelsius(Float temperaturaCelsius) {
-		this.temperaturaCelsius = temperaturaCelsius;
+	public void setAgarTipo(String agarTipo) {
+		this.agarTipo = agarTipo;
+	}
+
+	public Float getTemperaturaIncubacion() {
+		return temperaturaIncubacion;
+	}
+
+	public void setTemperaturaIncubacion(Float temperaturaIncubacion) {
+		this.temperaturaIncubacion = temperaturaIncubacion;
 	}
 
 	public Integer getTiempoIncubacionHoras() {
@@ -81,11 +105,35 @@ public class MedioCultivoJPAEntity {
 		this.composicion = composicion;
 	}
 
-	public String getAgarTipo() {
-		return agarTipo;
+	public String getProveedor() {
+		return proveedor;
 	}
 
-	public void setAgarTipo(String agarTipo) {
-		this.agarTipo = agarTipo;
+	public void setProveedor(String proveedor) {
+		this.proveedor = proveedor;
+	}
+
+	public Boolean getActivo() {
+		return activo;
+	}
+
+	public void setActivo(Boolean activo) {
+		this.activo = activo;
+	}
+
+	public Instant getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Instant fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Instant getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Instant fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
 	}
 }

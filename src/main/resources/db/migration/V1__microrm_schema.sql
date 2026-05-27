@@ -14,10 +14,14 @@ CREATE TABLE medios_cultivo (
     id_medio_cultivo UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     nombre VARCHAR(120) NOT NULL,
     codigo VARCHAR(40) NOT NULL,
-    temperatura_celsius REAL NOT NULL,
+    agar_tipo VARCHAR(120),
+    temperatura_incubacion REAL NOT NULL,
     tiempo_incubacion_horas INTEGER NOT NULL CHECK (tiempo_incubacion_horas >= 0),
     composicion TEXT,
-    agar_tipo VARCHAR(120),
+    proveedor VARCHAR(200),
+    activo BOOLEAN NOT NULL DEFAULT TRUE,
+    fecha_creacion TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    fecha_actualizacion TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     CONSTRAINT uk_medios_cultivo_nombre UNIQUE (nombre),
     CONSTRAINT uk_medios_cultivo_codigo UNIQUE (codigo)
 );
@@ -46,16 +50,26 @@ CREATE TABLE muestras (
     origen_anatomico VARCHAR(200) NOT NULL,
     fecha_hora_toma TIMESTAMPTZ NOT NULL,
     fecha_hora_recepcion TIMESTAMPTZ,
+    fecha_hora_procesamiento TIMESTAMPTZ,
     estado VARCHAR(30) NOT NULL,
     cantidad_morfotipos_bacterianos INTEGER NOT NULL DEFAULT 0 CHECK (cantidad_morfotipos_bacterianos >= 0),
-    observaciones VARCHAR(500),
+    es_contaminada BOOLEAN NOT NULL DEFAULT FALSE,
+    observaciones_clinicas TEXT,
+    observaciones_laboratorio TEXT,
     usuario_registra VARCHAR(120) NOT NULL,
     fecha_creacion TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     fecha_actualizacion TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    usuario_actualiza VARCHAR(120),
     CONSTRAINT uk_muestras_numero_laboratorio UNIQUE (numero_laboratorio),
-    CONSTRAINT chk_muestras_estado CHECK (estado IN ('RECIBIDA', 'PROCESADA', 'CONTAMINADA', 'RECHAZADA')),
+    CONSTRAINT chk_muestras_estado CHECK (estado IN ('RECIBIDA', 'EN_PROCESO', 'PROCESADA', 'CONTAMINADA', 'FINALIZADA', 'RECHAZADA')),
     CONSTRAINT chk_muestras_fechas CHECK (
-        fecha_hora_recepcion IS NULL OR fecha_hora_recepcion >= fecha_hora_toma
+        (fecha_hora_recepcion IS NULL OR fecha_hora_recepcion >= fecha_hora_toma)
+        AND (fecha_hora_procesamiento IS NULL OR fecha_hora_procesamiento >= fecha_hora_toma)
+        AND (
+            fecha_hora_procesamiento IS NULL
+            OR fecha_hora_recepcion IS NULL
+            OR fecha_hora_procesamiento >= fecha_hora_recepcion
+        )
     )
 );
 

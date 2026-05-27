@@ -34,7 +34,6 @@ public class RegisterNewPatientUseCaseImpl implements RegisterNewPatientUseCase 
 			throw MicroRMException.of(MessagesEnum.PACIENTE_IDENTIFICACION_DUPLICADA);
 		}
 		var entity = domainToEntityMapper.toEntity(data);
-		entity.setId(data.getId());
 		pacienteRepository.create(entity);
 		return data.getId();
 	}

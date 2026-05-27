@@ -13,8 +13,10 @@
 | Interfaz | Uso |
 |----------|-----|
 | `PacienteJpaEntityMapper` | `PacienteEntity` (dominio) ↔ `PacienteJPAEntity` (mapea `id` ↔ `idPaciente`). |
-| `RegisterPacienteApiMapper` | `RegisterPacienteRequest` (DTO record) ↔ `PacienteEntity`. |
+| `RegisterNewPatientDomainToPacienteEntityMapper` | `RegisterNewPatientDomain` → `PacienteEntity` (incluye `id` generado en el dominio). |
 | `MuestraEntityMapper` | `MuestraEntity` ↔ `MuestraJPAEntity` (IDs planos desde asociaciones; `toJpaScalars` ignora `paciente`/`tipoMuestra`/`medioCultivo`/`colaboradorRegistra`/`colaboradorProcesa` para rellenarlos en el adaptador con `getReferenceById`). |
+
+No hay mappers MapStruct para **colaborador** ni **medio de cultivo** porque hoy solo se usan por UUID (`exists` / `getReferenceById`), sin conversión dominio↔JPA expuesta. Cuando exista ese flujo, el mapeo debe ir aquí (misma convención que arriba).
 
 Implementaciones generadas en `target/generated-sources/annotations` (no editar a mano).
 

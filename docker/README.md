@@ -1,4 +1,4 @@
-﻿# PostgreSQL en Docker
+# PostgreSQL en Docker
 
 ## Arranque
 

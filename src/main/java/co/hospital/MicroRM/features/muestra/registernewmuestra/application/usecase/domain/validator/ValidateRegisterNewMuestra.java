@@ -72,6 +72,15 @@ public class ValidateRegisterNewMuestra implements Validator {
 		if (recepcion != null && recepcion.isBefore(candidate.getFechaHoraToma())) {
 			throw MicroRMException.of(MessagesEnum.MUESTRA_FECHAS_INVALIDAS);
 		}
+		Instant procesamiento = candidate.getFechaHoraProcesamiento();
+		if (procesamiento != null) {
+			if (procesamiento.isBefore(candidate.getFechaHoraToma())) {
+				throw MicroRMException.of(MessagesEnum.MUESTRA_FECHAS_INVALIDAS);
+			}
+			if (recepcion != null && procesamiento.isBefore(recepcion)) {
+				throw MicroRMException.of(MessagesEnum.MUESTRA_FECHAS_INVALIDAS);
+			}
+		}
 	}
 
 	public void validateNumeroLaboratorioAsignado(MuestraEntity candidate) {

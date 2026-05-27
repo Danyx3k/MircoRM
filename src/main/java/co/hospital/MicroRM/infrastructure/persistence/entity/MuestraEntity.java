@@ -13,14 +13,17 @@ public class MuestraEntity {
 	private String origenAnatomico;
 	private Instant fechaHoraToma;
 	private Instant fechaHoraRecepcion;
+	private Instant fechaHoraProcesamiento;
 	private String estado;
 	private Integer cantidadMorfotiposBacterianos;
-	private String observaciones;
+	private Boolean esContaminada;
+	private String observacionesClinicas;
+	private String observacionesLaboratorio;
 	private UUID idColaboradorRegistra;
 	private UUID idColaboradorProcesa;
-	private Boolean esContaminada;
 	private Instant fechaCreacion;
 	private Instant fechaActualizacion;
+	private String usuarioActualiza;
 
 	public UUID getId() {
 		return id;
@@ -86,6 +89,14 @@ public class MuestraEntity {
 		this.fechaHoraRecepcion = fechaHoraRecepcion;
 	}
 
+	public Instant getFechaHoraProcesamiento() {
+		return fechaHoraProcesamiento;
+	}
+
+	public void setFechaHoraProcesamiento(Instant fechaHoraProcesamiento) {
+		this.fechaHoraProcesamiento = fechaHoraProcesamiento;
+	}
+
 	public String getEstado() {
 		return estado;
 	}
@@ -102,12 +113,28 @@ public class MuestraEntity {
 		this.cantidadMorfotiposBacterianos = cantidadMorfotiposBacterianos;
 	}
 
-	public String getObservaciones() {
-		return observaciones;
+	public Boolean getEsContaminada() {
+		return esContaminada;
 	}
 
-	public void setObservaciones(String observaciones) {
-		this.observaciones = observaciones;
+	public void setEsContaminada(Boolean esContaminada) {
+		this.esContaminada = esContaminada;
+	}
+
+	public String getObservacionesClinicas() {
+		return observacionesClinicas;
+	}
+
+	public void setObservacionesClinicas(String observacionesClinicas) {
+		this.observacionesClinicas = observacionesClinicas;
+	}
+
+	public String getObservacionesLaboratorio() {
+		return observacionesLaboratorio;
+	}
+
+	public void setObservacionesLaboratorio(String observacionesLaboratorio) {
+		this.observacionesLaboratorio = observacionesLaboratorio;
 	}
 
 	public UUID getIdColaboradorRegistra() {
@@ -126,14 +153,6 @@ public class MuestraEntity {
 		this.idColaboradorProcesa = idColaboradorProcesa;
 	}
 
-	public Boolean getEsContaminada() {
-		return esContaminada;
-	}
-
-	public void setEsContaminada(Boolean esContaminada) {
-		this.esContaminada = esContaminada;
-	}
-
 	public Instant getFechaCreacion() {
 		return fechaCreacion;
 	}
@@ -148,5 +167,13 @@ public class MuestraEntity {
 
 	public void setFechaActualizacion(Instant fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public String getUsuarioActualiza() {
+		return usuarioActualiza;
+	}
+
+	public void setUsuarioActualiza(String usuarioActualiza) {
+		this.usuarioActualiza = usuarioActualiza;
 	}
 }

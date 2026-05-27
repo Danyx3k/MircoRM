@@ -16,9 +16,11 @@ public record RegisterMuestraRequest(
 		@NotBlank @Size(max = 200) String origenAnatomico,
 		@NotNull Instant fechaHoraToma,
 		Instant fechaHoraRecepcion,
+		Instant fechaHoraProcesamiento,
 		@NotBlank @Size(max = 30) String estado,
 		@NotNull @Min(0) @Max(9999) Integer cantidadMorfotiposBacterianos,
-		@Size(max = 500) String observaciones,
+		@Size(max = 8000) String observacionesClinicas,
+		@Size(max = 8000) String observacionesLaboratorio,
 		@NotNull UUID idColaboradorRegistra,
 		@NotNull UUID idColaboradorProcesa,
 		@NotNull Boolean esContaminada

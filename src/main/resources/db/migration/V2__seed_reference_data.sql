@@ -7,13 +7,25 @@ VALUES (
     'Cultivo de orina'
 ) ON CONFLICT (codigo) DO NOTHING;
 
-INSERT INTO medios_cultivo (id_medio_cultivo, nombre, codigo, temperatura_celsius, tiempo_incubacion_horas, composicion, agar_tipo)
+INSERT INTO medios_cultivo (
+    id_medio_cultivo,
+    nombre,
+    codigo,
+    agar_tipo,
+    temperatura_incubacion,
+    tiempo_incubacion_horas,
+    composicion,
+    proveedor,
+    activo
+)
 VALUES (
     '00000000-0000-4000-a000-000000000002',
     'Agar MacConkey',
     'MAC',
+    'MacConkey',
     37.0,
     24,
     'Peptona, lactosa, sales biliares',
-    'MacConkey'
+    NULL,
+    TRUE
 ) ON CONFLICT (codigo) DO NOTHING;

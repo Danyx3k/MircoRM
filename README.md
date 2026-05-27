@@ -1,4 +1,4 @@
-﻿# MicroRM
+# MicroRM
 
 Backend Spring Boot. Documentación: [documentos/README.md](documentos/README.md).
 

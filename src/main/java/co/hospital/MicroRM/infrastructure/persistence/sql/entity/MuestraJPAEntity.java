@@ -45,6 +45,9 @@ public class MuestraJPAEntity {
 	@Column(name = "fecha_hora_recepcion")
 	private Instant fechaHoraRecepcion;
 
+	@Column(name = "fecha_hora_procesamiento")
+	private Instant fechaHoraProcesamiento;
+
 	@Column(nullable = false, length = 30)
 	private String estado;
 
@@ -54,8 +57,11 @@ public class MuestraJPAEntity {
 	@Column(name = "es_contaminada", nullable = false)
 	private Boolean esContaminada = false;
 
-	@Column(length = 500)
-	private String observaciones;
+	@Column(name = "observaciones_clinicas", columnDefinition = "text")
+	private String observacionesClinicas;
+
+	@Column(name = "observaciones_laboratorio", columnDefinition = "text")
+	private String observacionesLaboratorio;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_colaborador_registra", nullable = false)
@@ -73,6 +79,9 @@ public class MuestraJPAEntity {
 
 	@Column(name = "fecha_actualizacion", nullable = false)
 	private Instant fechaActualizacion;
+
+	@Column(name = "usuario_actualiza", length = 120)
+	private String usuarioActualiza;
 
 	@PrePersist
 	void onCreate() {
@@ -152,6 +161,14 @@ public class MuestraJPAEntity {
 		this.fechaHoraRecepcion = fechaHoraRecepcion;
 	}
 
+	public Instant getFechaHoraProcesamiento() {
+		return fechaHoraProcesamiento;
+	}
+
+	public void setFechaHoraProcesamiento(Instant fechaHoraProcesamiento) {
+		this.fechaHoraProcesamiento = fechaHoraProcesamiento;
+	}
+
 	public String getEstado() {
 		return estado;
 	}
@@ -168,20 +185,28 @@ public class MuestraJPAEntity {
 		this.cantidadMorfotiposBacterianos = cantidadMorfotiposBacterianos;
 	}
 
-	public String getObservaciones() {
-		return observaciones;
-	}
-
-	public void setObservaciones(String observaciones) {
-		this.observaciones = observaciones;
-	}
-
 	public Boolean getEsContaminada() {
 		return esContaminada;
 	}
 
 	public void setEsContaminada(Boolean esContaminada) {
 		this.esContaminada = esContaminada;
+	}
+
+	public String getObservacionesClinicas() {
+		return observacionesClinicas;
+	}
+
+	public void setObservacionesClinicas(String observacionesClinicas) {
+		this.observacionesClinicas = observacionesClinicas;
+	}
+
+	public String getObservacionesLaboratorio() {
+		return observacionesLaboratorio;
+	}
+
+	public void setObservacionesLaboratorio(String observacionesLaboratorio) {
+		this.observacionesLaboratorio = observacionesLaboratorio;
 	}
 
 	public ColaboradorJPAEntity getColaboradorRegistra() {
@@ -222,5 +247,13 @@ public class MuestraJPAEntity {
 
 	public void setFechaActualizacion(Instant fechaActualizacion) {
 		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public String getUsuarioActualiza() {
+		return usuarioActualiza;
+	}
+
+	public void setUsuarioActualiza(String usuarioActualiza) {
+		this.usuarioActualiza = usuarioActualiza;
 	}
 }

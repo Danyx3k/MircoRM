@@ -8,8 +8,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Alineado con el DDL real de {@code microlab.colaborador} (nombre + apellido, auditoría, etc.).
+ */
 @Entity
 @Table(name = "colaborador")
 public class ColaboradorJPAEntity {
@@ -25,8 +29,11 @@ public class ColaboradorJPAEntity {
 	@Column(nullable = false, unique = true, length = 120)
 	private String username;
 
-	@Column(name = "nombre_completo", nullable = false, length = 200)
-	private String nombreCompleto;
+	@Column(nullable = false, length = 100)
+	private String nombre;
+
+	@Column(nullable = false, length = 100)
+	private String apellido;
 
 	@Column(nullable = false, unique = true, length = 160)
 	private String email;
@@ -46,8 +53,26 @@ public class ColaboradorJPAEntity {
 	@Column(length = 120)
 	private String departamento;
 
+	@Column(name = "area_laboratorio", length = 120)
+	private String areaLaboratorio;
+
 	@Column(nullable = false)
 	private Boolean activo = true;
+
+	@Column(name = "fecha_ultimo_acceso")
+	private Instant fechaUltimoAcceso;
+
+	@Column(name = "fecha_creacion")
+	private Instant fechaCreacion;
+
+	@Column(name = "fecha_actualizacion")
+	private Instant fechaActualizacion;
+
+	@Column(name = "usuario_crea", length = 80)
+	private String usuarioCrea;
+
+	@Column(name = "usuario_actualiza", length = 80)
+	private String usuarioActualiza;
 
 	public UUID getIdColaborador() {
 		return idColaborador;
@@ -73,12 +98,20 @@ public class ColaboradorJPAEntity {
 		this.username = username;
 	}
 
-	public String getNombreCompleto() {
-		return nombreCompleto;
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void setNombreCompleto(String nombreCompleto) {
-		this.nombreCompleto = nombreCompleto;
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getApellido() {
+		return apellido;
+	}
+
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
 	}
 
 	public String getEmail() {
@@ -129,11 +162,59 @@ public class ColaboradorJPAEntity {
 		this.departamento = departamento;
 	}
 
+	public String getAreaLaboratorio() {
+		return areaLaboratorio;
+	}
+
+	public void setAreaLaboratorio(String areaLaboratorio) {
+		this.areaLaboratorio = areaLaboratorio;
+	}
+
 	public Boolean getActivo() {
 		return activo;
 	}
 
 	public void setActivo(Boolean activo) {
 		this.activo = activo;
+	}
+
+	public Instant getFechaUltimoAcceso() {
+		return fechaUltimoAcceso;
+	}
+
+	public void setFechaUltimoAcceso(Instant fechaUltimoAcceso) {
+		this.fechaUltimoAcceso = fechaUltimoAcceso;
+	}
+
+	public Instant getFechaCreacion() {
+		return fechaCreacion;
+	}
+
+	public void setFechaCreacion(Instant fechaCreacion) {
+		this.fechaCreacion = fechaCreacion;
+	}
+
+	public Instant getFechaActualizacion() {
+		return fechaActualizacion;
+	}
+
+	public void setFechaActualizacion(Instant fechaActualizacion) {
+		this.fechaActualizacion = fechaActualizacion;
+	}
+
+	public String getUsuarioCrea() {
+		return usuarioCrea;
+	}
+
+	public void setUsuarioCrea(String usuarioCrea) {
+		this.usuarioCrea = usuarioCrea;
+	}
+
+	public String getUsuarioActualiza() {
+		return usuarioActualiza;
+	}
+
+	public void setUsuarioActualiza(String usuarioActualiza) {
+		this.usuarioActualiza = usuarioActualiza;
 	}
 }
