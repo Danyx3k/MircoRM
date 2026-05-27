@@ -83,7 +83,7 @@ public class PacienteApiController {
 				.body(new RegisterNewPatientResponse(MessagesEnum.PACIENTE_REGISTRADO_OK.getCode(), mensaje, id));
 	}
 
-	@Operation(summary = "Buscar paciente por documento", description = "Para registro de muestra: devuelve datos demográficos y observación clínica.")
+	@Operation(summary = "Buscar paciente por documento", description = "Para registro de muestra: datos demográficos, observación clínica y muestras ya registradas (un paciente puede tener varias).")
 	@GetMapping("/por-identificacion/{identificacion}")
 	public ResponseEntity<PacienteBusquedaResponse> buscarPorIdentificacion(@PathVariable String identificacion) {
 		return ResponseEntity.ok(buscarPacientePorIdentificacionService.buscar(identificacion));

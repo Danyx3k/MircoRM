@@ -7,6 +7,7 @@ import co.hospital.MicroRM.infrastructure.persistence.sql.MuestraJpaRepository;
 import co.hospital.MicroRM.infrastructure.persistence.sql.PacienteJpaRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ public class ListPacientesConsultaService {
 		this.muestraJpaRepository = muestraJpaRepository;
 	}
 
+	@Transactional(readOnly = true)
 	public List<PacienteResumenResponse> listarPacientes() {
 		return pacienteJpaRepository.findAll(Sort.by(Sort.Direction.ASC, "apellido", "nombre")).stream()
 				.map(p -> new PacienteResumenResponse(
@@ -33,6 +35,7 @@ public class ListPacientesConsultaService {
 				.toList();
 	}
 
+	@Transactional(readOnly = true)
 	public List<PacienteConMuestrasResponse> listarPacientesConMuestras() {
 		return pacienteJpaRepository.findAllWithMuestrasOrderByApellidoAscNombreAsc().stream()
 				.map(p -> {

@@ -4,7 +4,7 @@
 
 1. En [Auth0 Dashboard](https://manage.auth0.com/) → **Applications** → **APIs** → **Create API**.
 2. **Name:** MicroRM API (o el que prefiera).
-3. **Identifier:** valor que usará como *audience* (p. ej. `https://microrm-api` o `microrm-api`). Debe coincidir en backend y frontend.
+3. **Identifier:** valor que usará como *audience* (en este tenant: `https://microrm-api/` **con barra final**). Debe coincidir **exactamente** en backend y frontend.
 4. **Signing Algorithm:** RS256 (por defecto).
 
 ## 2. Aplicación SPA (frontend)
@@ -25,7 +25,7 @@ Copie `application-auth0.example.properties` o exporte:
 |----------|---------|
 | `AUTH_ENABLED` | `true` |
 | `AUTH0_ISSUER_URI` | `https://TU-TENANT.us.auth0.com/` |
-| `AUTH0_AUDIENCE` | `https://microrm-api` (mismo Identifier de la API) |
+| `AUTH0_AUDIENCE` | `https://microrm-api/` (mismo Identifier de la API) |
 
 Desarrollo local sin JWT: `AUTH_ENABLED=false` (valor por defecto).
 
@@ -34,7 +34,7 @@ Desarrollo local sin JWT: `AUTH_ENABLED=false` (valor por defecto).
 ```env
 VITE_AUTH0_DOMAIN=TU-TENANT.us.auth0.com
 VITE_AUTH0_CLIENT_ID=xxxxxxxx
-VITE_AUTH0_AUDIENCE=https://microrm-api
+VITE_AUTH0_AUDIENCE=https://microrm-api/
 ```
 
 `VITE_AUTH0_AUDIENCE` debe ser **idéntico** a `AUTH0_AUDIENCE` del backend.

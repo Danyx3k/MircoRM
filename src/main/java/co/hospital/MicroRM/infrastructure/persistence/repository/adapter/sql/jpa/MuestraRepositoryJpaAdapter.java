@@ -2,8 +2,8 @@ package co.hospital.MicroRM.infrastructure.persistence.repository.adapter.sql.jp
 
 import co.hospital.MicroRM.crossscutting.exception.MicroRMException;
 import co.hospital.MicroRM.crossscutting.messagescatalog.MessagesEnum;
-import co.hospital.MicroRM.features.muestra.registernewmuestra.application.usecase.domain.NumeroLaboratorioDiarioFormatter;
 import co.hospital.MicroRM.infrastructure.persistence.entity.MuestraEntity;
+import co.hospital.MicroRM.infrastructure.persistence.query.ColaboradorContextService;
 import co.hospital.MicroRM.infrastructure.persistence.query.MicrolabCatalogResolver;
 import co.hospital.MicroRM.infrastructure.persistence.repository.MuestraRepository;
 import co.hospital.MicroRM.infrastructure.persistence.sql.ColaboradorJpaRepository;
@@ -15,12 +15,9 @@ import co.hospital.MicroRM.infrastructure.persistence.sql.SitioAnatomicoJpaRepos
 import co.hospital.MicroRM.infrastructure.persistence.sql.TipoMuestraJpaRepository;
 import co.hospital.MicroRM.infrastructure.persistence.sql.entity.MuestraJPAEntity;
 import co.hospital.MicroRM.infrastructure.persistence.sql.entity.MuestraPacienteJPAEntity;
-import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,8 +32,7 @@ public class MuestraRepositoryJpaAdapter implements MuestraRepository {
 	private final EstadoJpaRepository estadoJpaRepository;
 	private final ColaboradorJpaRepository colaboradorJpaRepository;
 	private final MicrolabCatalogResolver catalogResolver;
-	private final EntityManager entityManager;
-	private final Clock microRmClock;
+	private final ColaboradorContextService colaboradorContextService;
 
 	public MuestraRepositoryJpaAdapter(
 			MuestraJpaRepository muestraJpaRepository,
@@ -47,8 +43,7 @@ public class MuestraRepositoryJpaAdapter implements MuestraRepository {
 			EstadoJpaRepository estadoJpaRepository,
 			ColaboradorJpaRepository colaboradorJpaRepository,
 			MicrolabCatalogResolver catalogResolver,
-			EntityManager entityManager,
-			Clock microRmClock) {
+			ColaboradorContextService colaboradorContextService) {
 		this.muestraJpaRepository = muestraJpaRepository;
 		this.muestraPacienteJpaRepository = muestraPacienteJpaRepository;
 		this.pacienteJpaRepository = pacienteJpaRepository;
@@ -57,8 +52,7 @@ public class MuestraRepositoryJpaAdapter implements MuestraRepository {
 		this.estadoJpaRepository = estadoJpaRepository;
 		this.colaboradorJpaRepository = colaboradorJpaRepository;
 		this.catalogResolver = catalogResolver;
-		this.entityManager = entityManager;
-		this.microRmClock = microRmClock;
+		this.colaboradorContextService = colaboradorContextService;
 	}
 
 	@Override
@@ -72,34 +66,35 @@ public class MuestraRepositoryJpaAdapter implements MuestraRepository {
 				entity.getIdEstado() != null ? entity.getIdEstado() : catalogResolver.estadoRecibidaId()));
 		UUID colaboradorId = entity.getIdColaborador() != null
 				? entity.getIdColaborador()
-				: catalogResolver.colaboradorCapturaMuestra();
+				: colaboradorContextService.resolveColaboradorCapturaId();
 		jpa.setColaborador(colaboradorJpaRepository.getReferenceById(colaboradorId));
 		jpa.setFechaHoraToma(entity.getFechaHoraToma());
 		jpa.setObservacionesLaboratorio(entity.getObservacionesLaboratorio());
-		muestraJpaRepository.saveAndFlush(jpa);
-		ensureNumeroLaboratorio(jpa);
+		MuestraJPAEntity saved = muestraJpaRepository.saveAndFlush(jpa);
+		saved = attachNumeroLaboratorioFromDatabase(saved.getIdMuestra());
 
 		MuestraPacienteJPAEntity link = new MuestraPacienteJPAEntity();
 		link.setIdMuestraPaciente(UUID.randomUUID());
-		link.setMuestra(jpa);
+		link.setMuestra(muestraJpaRepository.getReferenceById(saved.getIdMuestra()));
 		link.setPaciente(pacienteJpaRepository.getReferenceById(entity.getIdPaciente()));
 		muestraPacienteJpaRepository.save(link);
 
-		entity.setNumeroLaboratorio(jpa.getNumeroLaboratorio());
-		return jpa.getIdMuestra();
+		entity.setNumeroLaboratorio(saved.getNumeroLaboratorio());
+		return saved.getIdMuestra();
 	}
 
-	private void ensureNumeroLaboratorio(MuestraJPAEntity jpa) {
-		if (jpa.getNumeroLaboratorio() != null && !jpa.getNumeroLaboratorio().isBlank()) {
-			return;
-		}
-		entityManager.refresh(jpa);
-		if (jpa.getNumeroLaboratorio() != null && !jpa.getNumeroLaboratorio().isBlank()) {
-			return;
-		}
-		LocalDate hoy = LocalDate.now(microRmClock);
-		jpa.setNumeroLaboratorio(NumeroLaboratorioDiarioFormatter.format(hoy, 1));
-		muestraJpaRepository.save(jpa);
+	/**
+	 * El trigger de BD asigna {@code numero_laboratorio} en el INSERT; Hibernate no siempre lo refleja
+	 * en la entidad en memoria, por eso se lee con una consulta dedicada (evita duplicar ...001).
+	 */
+	private MuestraJPAEntity attachNumeroLaboratorioFromDatabase(UUID idMuestra) {
+		String numero = muestraJpaRepository.findNumeroLaboratorioById(idMuestra)
+				.filter(n -> n != null && !n.isBlank())
+				.orElseThrow(() -> MicroRMException.of(MessagesEnum.COMMON_VALIDATION_ERROR));
+		MuestraJPAEntity managed = muestraJpaRepository.findById(idMuestra)
+				.orElseThrow(() -> MicroRMException.of(MessagesEnum.MUESTRA_NO_ENCONTRADA));
+		managed.setNumeroLaboratorio(numero);
+		return managed;
 	}
 
 	@Override

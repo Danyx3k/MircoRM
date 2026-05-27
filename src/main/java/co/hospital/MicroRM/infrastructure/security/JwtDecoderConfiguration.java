@@ -3,6 +3,7 @@ package co.hospital.MicroRM.infrastructure.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 class JwtDecoderConfiguration {
 
 	@Bean
+	@Lazy
 	JwtDecoder jwtDecoder(MicroRmAuthProperties auth) {
 		String issuer = auth.getIssuerUri().trim();
 		try {

@@ -5,6 +5,7 @@ import co.hospital.MicroRM.crossscutting.messagescatalog.MessagesEnum;
 import co.hospital.MicroRM.features.muestra.registernewmuestra.application.usecase.domain.RegisterNewMuestraUseCase;
 import co.hospital.MicroRM.features.muestra.registernewmuestra.application.usecase.domain.validator.ValidateRegisterNewMuestra;
 import co.hospital.MicroRM.infrastructure.persistence.entity.MuestraEntity;
+import co.hospital.MicroRM.infrastructure.persistence.query.ColaboradorContextService;
 import co.hospital.MicroRM.infrastructure.persistence.query.MicrolabCatalogResolver;
 import co.hospital.MicroRM.infrastructure.persistence.repository.MuestraRepository;
 import co.hospital.MicroRM.infrastructure.persistence.repository.PacienteRepository;
@@ -23,6 +24,7 @@ public class RegisterNewMuestraUseCaseImpl implements RegisterNewMuestraUseCase 
 	private final SitioAnatomicoJpaRepository sitioAnatomicoJpaRepository;
 	private final TipoMuestraJpaRepository tipoMuestraJpaRepository;
 	private final MicrolabCatalogResolver catalogResolver;
+	private final ColaboradorContextService colaboradorContextService;
 	private final ValidateRegisterNewMuestra validateRegisterNewMuestra;
 
 	public RegisterNewMuestraUseCaseImpl(
@@ -31,12 +33,14 @@ public class RegisterNewMuestraUseCaseImpl implements RegisterNewMuestraUseCase 
 			SitioAnatomicoJpaRepository sitioAnatomicoJpaRepository,
 			TipoMuestraJpaRepository tipoMuestraJpaRepository,
 			MicrolabCatalogResolver catalogResolver,
+			ColaboradorContextService colaboradorContextService,
 			ValidateRegisterNewMuestra validateRegisterNewMuestra) {
 		this.muestraRepository = muestraRepository;
 		this.pacienteRepository = pacienteRepository;
 		this.sitioAnatomicoJpaRepository = sitioAnatomicoJpaRepository;
 		this.tipoMuestraJpaRepository = tipoMuestraJpaRepository;
 		this.catalogResolver = catalogResolver;
+		this.colaboradorContextService = colaboradorContextService;
 		this.validateRegisterNewMuestra = validateRegisterNewMuestra;
 	}
 
@@ -44,7 +48,7 @@ public class RegisterNewMuestraUseCaseImpl implements RegisterNewMuestraUseCase 
 	@Transactional
 	public UUID execute(MuestraEntity data) {
 		data.setIdEstado(catalogResolver.estadoRecibidaId());
-		data.setIdColaborador(catalogResolver.colaboradorCapturaMuestra());
+		data.setIdColaborador(colaboradorContextService.resolveColaboradorCapturaId());
 		validateRegisterNewMuestra.validate(data);
 		if (!pacienteRepository.existsById(data.getIdPaciente())) {
 			throw MicroRMException.of(MessagesEnum.MUESTRA_PACIENTE_NO_EXISTE);
