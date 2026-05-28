@@ -1,0 +1,12 @@
+**/target/
+.git/
+.idea/
+*.iml
+_ref_ucoparking/
+documentos/
+*.md
+!docker/README.md
+application-auth0.local.properties
+*.png
+*.lnk
+microrm-api/Nuevo documento de texto.txt
