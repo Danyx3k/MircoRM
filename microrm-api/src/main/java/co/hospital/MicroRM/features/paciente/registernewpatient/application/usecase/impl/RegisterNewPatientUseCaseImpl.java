@@ -7,8 +7,11 @@ import co.hospital.MicroRM.features.paciente.registernewpatient.application.usec
 import co.hospital.MicroRM.features.paciente.registernewpatient.application.usecase.domain.validator.ValidateRegisterNewPatient;
 import co.hospital.MicroRM.infrastructure.persistence.entity.PacienteEntity;
 import co.hospital.MicroRM.infrastructure.persistence.query.MicrolabCatalogResolver;
+import co.hospital.MicroRM.infrastructure.messaging.domain.PacienteRegistradoEvent;
 import co.hospital.MicroRM.infrastructure.persistence.repository.PacienteRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -18,17 +21,21 @@ public class RegisterNewPatientUseCaseImpl implements RegisterNewPatientUseCase 
 	private final PacienteRepository pacienteRepository;
 	private final ValidateRegisterNewPatient validateRegisterNewPatient;
 	private final MicrolabCatalogResolver catalogResolver;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 	public RegisterNewPatientUseCaseImpl(
 			PacienteRepository pacienteRepository,
 			ValidateRegisterNewPatient validateRegisterNewPatient,
-			MicrolabCatalogResolver catalogResolver) {
+			MicrolabCatalogResolver catalogResolver,
+			ApplicationEventPublisher applicationEventPublisher) {
 		this.pacienteRepository = pacienteRepository;
 		this.validateRegisterNewPatient = validateRegisterNewPatient;
 		this.catalogResolver = catalogResolver;
+		this.applicationEventPublisher = applicationEventPublisher;
 	}
 
 	@Override
+	@Transactional
 	public UUID execute(RegisterNewPatientDomain data) {
 		validateRegisterNewPatient.validate(data);
 		if (pacienteRepository.existsByNumeroIdentificacionIgnoreCase(data.getNumeroIdentificacion())) {
@@ -36,6 +43,8 @@ public class RegisterNewPatientUseCaseImpl implements RegisterNewPatientUseCase 
 		}
 		PacienteEntity entity = toEntity(data);
 		pacienteRepository.create(entity);
+		applicationEventPublisher.publishEvent(
+				new PacienteRegistradoEvent(data.getId(), data.getNumeroIdentificacion()));
 		return data.getId();
 	}
 

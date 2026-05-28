@@ -10,7 +10,9 @@ import co.hospital.MicroRM.infrastructure.persistence.query.MicrolabCatalogResol
 import co.hospital.MicroRM.infrastructure.persistence.repository.MuestraRepository;
 import co.hospital.MicroRM.infrastructure.persistence.repository.PacienteRepository;
 import co.hospital.MicroRM.infrastructure.persistence.sql.SitioAnatomicoJpaRepository;
+import co.hospital.MicroRM.infrastructure.messaging.domain.MuestraRegistradaEvent;
 import co.hospital.MicroRM.infrastructure.persistence.sql.TipoMuestraJpaRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,7 @@ public class RegisterNewMuestraUseCaseImpl implements RegisterNewMuestraUseCase 
 	private final MicrolabCatalogResolver catalogResolver;
 	private final ColaboradorContextService colaboradorContextService;
 	private final ValidateRegisterNewMuestra validateRegisterNewMuestra;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 	public RegisterNewMuestraUseCaseImpl(
 			MuestraRepository muestraRepository,
@@ -34,7 +37,8 @@ public class RegisterNewMuestraUseCaseImpl implements RegisterNewMuestraUseCase 
 			TipoMuestraJpaRepository tipoMuestraJpaRepository,
 			MicrolabCatalogResolver catalogResolver,
 			ColaboradorContextService colaboradorContextService,
-			ValidateRegisterNewMuestra validateRegisterNewMuestra) {
+			ValidateRegisterNewMuestra validateRegisterNewMuestra,
+			ApplicationEventPublisher applicationEventPublisher) {
 		this.muestraRepository = muestraRepository;
 		this.pacienteRepository = pacienteRepository;
 		this.sitioAnatomicoJpaRepository = sitioAnatomicoJpaRepository;
@@ -42,6 +46,7 @@ public class RegisterNewMuestraUseCaseImpl implements RegisterNewMuestraUseCase 
 		this.catalogResolver = catalogResolver;
 		this.colaboradorContextService = colaboradorContextService;
 		this.validateRegisterNewMuestra = validateRegisterNewMuestra;
+		this.applicationEventPublisher = applicationEventPublisher;
 	}
 
 	@Override
@@ -62,6 +67,9 @@ public class RegisterNewMuestraUseCaseImpl implements RegisterNewMuestraUseCase 
 		if (data.getId() == null) {
 			data.setId(UUID.randomUUID());
 		}
-		return muestraRepository.create(data);
+		UUID idMuestra = muestraRepository.create(data);
+		applicationEventPublisher.publishEvent(
+				new MuestraRegistradaEvent(idMuestra, data.getIdPaciente(), data.getNumeroLaboratorio()));
+		return idMuestra;
 	}
 }

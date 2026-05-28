@@ -58,6 +58,18 @@ docker compose logs -f microrm-gateway
 
 Flujo: `Cliente → microrm-waf → microrm-gateway → microrm-api`. Ver [waf/README.md](waf/README.md).
 
+Kafka y CDC (Debezium): [kafka/README.md](kafka/README.md) · [documentos/kafka-cdc.md](../documentos/kafka-cdc.md).
+
+### El front no ve el back (502 en `/actuator/health`)
+
+Si el gateway se recreó y el WAF sigue con IP antigua, reinicie solo el WAF:
+
+```powershell
+docker compose restart microrm-waf
+```
+
+El compose usa `RESOLVERS=127.0.0.11` para re-resolver `microrm-gateway` cada pocos segundos. Tras `docker compose up -d --build`, si cambió el gateway, conviene `docker compose up -d --force-recreate microrm-waf`.
+
 ## Auth0 (FrontMicroRm)
 
 El API en Docker arranca con JWT (`AUTH_ENABLED=true` por defecto en `env.example`). Debe coincidir con `VITE_AUTH0_AUDIENCE` del front (`https://microrm-api/`).

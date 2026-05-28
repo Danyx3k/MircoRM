@@ -1,0 +1,16 @@
+{
+  "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+  "database.hostname": "postgres",
+  "database.port": "5432",
+  "database.user": "microrm",
+  "database.password": "microrm_dev",
+  "database.dbname": "microrm",
+  "topic.prefix": "microrm",
+  "schema.include.list": "microlab",
+  "table.include.list": "microlab.paciente,microlab.muestra,microlab.muestra_paciente",
+  "plugin.name": "pgoutput",
+  "publication.autocreate.mode": "filtered",
+  "slot.name": "microrm_debezium",
+  "tombstones.on.delete": "true",
+  "decimal.handling.mode": "string"
+}
