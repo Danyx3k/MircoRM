@@ -34,5 +34,8 @@ build/
 ### Docker (credenciales locales) ###
 docker/.env
 
+### Auth0 local (no subir) ###
+application-auth0.local.properties
+
 ### Referencia local UcoParking (no versionar) ###
 _ref_ucoparking/
