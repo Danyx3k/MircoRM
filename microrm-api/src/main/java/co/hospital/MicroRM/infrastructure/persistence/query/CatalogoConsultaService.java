@@ -1,8 +1,10 @@
 package co.hospital.MicroRM.infrastructure.persistence.query;
 
+import co.hospital.MicroRM.infrastructure.cache.MicrormCacheNames;
 import co.hospital.MicroRM.infrastructure.persistence.mapper.dto.CatalogoItemResponse;
 import co.hospital.MicroRM.infrastructure.persistence.sql.EpsJpaRepository;
 import co.hospital.MicroRM.infrastructure.persistence.sql.SexoJpaRepository;
+import org.springframework.cache.annotation.Cacheable;
 import co.hospital.MicroRM.infrastructure.persistence.sql.SitioAnatomicoJpaRepository;
 import co.hospital.MicroRM.infrastructure.persistence.sql.TipoDocumentoJpaRepository;
 import co.hospital.MicroRM.infrastructure.persistence.sql.TipoMuestraJpaRepository;
@@ -39,6 +41,7 @@ public class CatalogoConsultaService {
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable(cacheNames = MicrormCacheNames.SITIOS_ANATOMICOS, key = "#q != null && !#q.isBlank() ? #q.trim().toLowerCase() : '__all__'")
 	public List<CatalogoItemResponse> buscarSitiosAnatomicos(String q) {
 		List<SitioAnatomicoJPAEntity> rows = isBlank(q)
 				? sitioAnatomicoJpaRepository.findAllByOrderByNombreAsc()
@@ -47,6 +50,7 @@ public class CatalogoConsultaService {
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable(cacheNames = MicrormCacheNames.TIPOS_MUESTRA, key = "#q != null && !#q.isBlank() ? #q.trim().toLowerCase() : '__all__'")
 	public List<CatalogoItemResponse> buscarTiposMuestra(String q) {
 		List<TipoMuestraJPAEntity> rows = isBlank(q)
 				? tipoMuestraJpaRepository.findAllByOrderByNombreAsc()
@@ -55,16 +59,19 @@ public class CatalogoConsultaService {
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable(cacheNames = MicrormCacheNames.TIPOS_DOCUMENTO)
 	public List<CatalogoItemResponse> listarTiposDocumento() {
 		return tipoDocumentoJpaRepository.findAll().stream().map(CatalogoConsultaService::toItem).toList();
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable(cacheNames = MicrormCacheNames.SEXOS)
 	public List<CatalogoItemResponse> listarSexos() {
 		return sexoJpaRepository.findAll().stream().map(CatalogoConsultaService::toItem).toList();
 	}
 
 	@Transactional(readOnly = true)
+	@Cacheable(cacheNames = MicrormCacheNames.EPS)
 	public List<CatalogoItemResponse> listarEps() {
 		return epsJpaRepository.findAll().stream().map(CatalogoConsultaService::toItem).toList();
 	}

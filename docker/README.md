@@ -60,6 +60,8 @@ Flujo: `Cliente → microrm-waf → microrm-gateway → microrm-api`. Ver [waf/R
 
 Kafka y CDC (Debezium): [kafka/README.md](kafka/README.md) · [documentos/kafka-cdc.md](../documentos/kafka-cdc.md).
 
+Redis (caché de catálogos): [redis/README.md](redis/README.md) · [documentos/redis-cache.md](../documentos/redis-cache.md).
+
 ### El front no ve el back (502 en `/actuator/health`)
 
 Si el gateway se recreó y el WAF sigue con IP antigua, reinicie solo el WAF:
