@@ -3,6 +3,7 @@ package co.hospital.MicroRM.infrastructure.persistence.controler.advice;
 import co.hospital.MicroRM.crossscutting.exception.MicroRMException;
 import co.hospital.MicroRM.crossscutting.messagescatalog.MessagesEnum;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -63,5 +64,12 @@ public class MicroRMExceptionHandler {
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
 				"codigo", "MRM-0004",
 				"mensaje", "Violación de integridad de datos (clave única o foránea)."));
+	}
+
+	@ExceptionHandler(InvalidDataAccessApiUsageException.class)
+	public ResponseEntity<Map<String, Object>> handleInvalidDataAccess(InvalidDataAccessApiUsageException ex) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of(
+				"codigo", "MRM-0005",
+				"mensaje", "Error al guardar en base de datos. Reinicie el API si acaba de actualizar el backend."));
 	}
 }

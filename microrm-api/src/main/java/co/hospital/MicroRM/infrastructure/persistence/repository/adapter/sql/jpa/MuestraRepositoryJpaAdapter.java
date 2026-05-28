@@ -71,7 +71,7 @@ public class MuestraRepositoryJpaAdapter implements MuestraRepository {
 		jpa.setFechaHoraToma(entity.getFechaHoraToma());
 		jpa.setObservacionesLaboratorio(entity.getObservacionesLaboratorio());
 		MuestraJPAEntity saved = muestraJpaRepository.saveAndFlush(jpa);
-		saved = attachNumeroLaboratorioFromDatabase(saved.getIdMuestra());
+		saved = attachNumeroLaboratorioFromDatabase(saved);
 
 		MuestraPacienteJPAEntity link = new MuestraPacienteJPAEntity();
 		link.setIdMuestraPaciente(UUID.randomUUID());
@@ -87,14 +87,12 @@ public class MuestraRepositoryJpaAdapter implements MuestraRepository {
 	 * El trigger de BD asigna {@code numero_laboratorio} en el INSERT; Hibernate no siempre lo refleja
 	 * en la entidad en memoria, por eso se lee con una consulta dedicada (evita duplicar ...001).
 	 */
-	private MuestraJPAEntity attachNumeroLaboratorioFromDatabase(UUID idMuestra) {
-		String numero = muestraJpaRepository.findNumeroLaboratorioById(idMuestra)
+	private MuestraJPAEntity attachNumeroLaboratorioFromDatabase(MuestraJPAEntity saved) {
+		String numero = muestraJpaRepository.findNumeroLaboratorioById(saved.getIdMuestra())
 				.filter(n -> n != null && !n.isBlank())
 				.orElseThrow(() -> MicroRMException.of(MessagesEnum.COMMON_VALIDATION_ERROR));
-		MuestraJPAEntity managed = muestraJpaRepository.findById(idMuestra)
-				.orElseThrow(() -> MicroRMException.of(MessagesEnum.MUESTRA_NO_ENCONTRADA));
-		managed.setNumeroLaboratorio(numero);
-		return managed;
+		saved.setNumeroLaboratorio(numero);
+		return saved;
 	}
 
 	@Override
