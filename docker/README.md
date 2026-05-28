@@ -2,7 +2,7 @@
 
 
 
-Stack local: **PostgreSQL**, **API** (`microrm-api`) y **API Gateway** (`microrm-gateway`).
+Stack local: **PostgreSQL**, **API** (`microrm-api`), **API Gateway** (`microrm-gateway`) y **WAF** (`microrm-waf`, ModSecurity + OWASP CRS).
 
 
 
@@ -46,9 +46,9 @@ docker compose logs -f microrm-gateway
 
 |----------|----------------|
 
-| Gateway (entrada HTTP) | http://localhost:8080 |
+| **WAF** (entrada HTTP) | http://localhost:8080 |
 
-| API (depuración directa) | http://localhost:8081 |
+| API (depuración directa, sin WAF) | http://localhost:8081 |
 
 | Swagger UI | http://localhost:8080/swagger-ui/index.html |
 
@@ -56,7 +56,7 @@ docker compose logs -f microrm-gateway
 
 
 
-El gateway enruta al API por la red interna (`MICRORM_API_URI=http://microrm-api:8081`).
+Flujo: `Cliente → microrm-waf → microrm-gateway → microrm-api`. Ver [waf/README.md](waf/README.md).
 
 ## Auth0 (FrontMicroRm)
 
