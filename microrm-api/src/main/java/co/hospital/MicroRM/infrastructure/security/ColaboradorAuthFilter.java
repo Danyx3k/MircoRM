@@ -43,6 +43,9 @@ public class ColaboradorAuthFilter extends OncePerRequestFilter {
 			return true;
 		}
 		String path = request.getRequestURI();
+		if ("GET".equalsIgnoreCase(request.getMethod()) && path.startsWith("/api/v1/catalogos/")) {
+			return true;
+		}
 		return !path.startsWith("/api/");
 	}
 
@@ -58,7 +61,7 @@ public class ColaboradorAuthFilter extends OncePerRequestFilter {
 		Jwt jwt = jwtAuth.getToken();
 		String email = colaboradorEmailResolver.resolve(jwt);
 		if (!StringUtils.hasText(email)) {
-			log.warn("Acceso denegado: el token no incluye correo (ruta {}). Compruebe audience y /userinfo en Auth0.",
+			log.warn("Acceso denegado: el token no incluye correo (ruta {}). Añada scope email en Auth0 y compruebe /userinfo.",
 					request.getRequestURI());
 			SecurityProblemResponseWriter.writeColaboradorNoAutorizado(response);
 			return;

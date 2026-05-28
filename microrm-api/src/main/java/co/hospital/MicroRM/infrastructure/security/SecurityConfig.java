@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,12 +26,27 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableConfigurationProperties(MicroRmAuthProperties.class)
 public class SecurityConfig {
 
+	/**
+	 * Catálogos de solo lectura: sin JWT ni filtro de colaborador (evita 403 con Auth0 si el correo no está en microlab).
+	 */
 	@Bean
-	SecurityFilterChain securityFilterChain(
+	@Order(1)
+	SecurityFilterChain catalogosSecurityFilterChain(HttpSecurity http) throws Exception {
+		http.securityMatcher("/api/v1/catalogos/**")
+				.csrf(csrf -> csrf.disable())
+				.cors(Customizer.withDefaults())
+				.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+		return http.build();
+	}
+
+	@Bean
+	@Order(2)
+	SecurityFilterChain apiSecurityFilterChain(
 			HttpSecurity http,
 			MicroRmAuthProperties auth,
 			ObjectProvider<ColaboradorAuthFilter> colaboradorAuthFilter) throws Exception {
-		http.csrf(csrf -> csrf.disable())
+		http.securityMatcher("/api/**", "/actuator/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
+				.csrf(csrf -> csrf.disable())
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.cors(Customizer.withDefaults());
 
