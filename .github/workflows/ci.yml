@@ -1,0 +1,44 @@
+# MicroRM — integración continua (Maven: API + Gateway)
+name: CI
+
+on:
+  push:
+    branches: [main, cache, CDC, WAF, API-getway, Aut0, 'CI/CD']
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    name: Maven verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 26
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '26'
+          cache: maven
+
+      - name: Build and test
+        run: mvn -B -ntp verify
+
+  docker-compose-validate:
+    name: Docker Compose syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate compose file
+        working-directory: docker
+        run: docker compose -f compose.yaml config --quiet
