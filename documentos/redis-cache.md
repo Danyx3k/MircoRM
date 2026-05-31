@@ -1,10 +1,10 @@
-# Redis y caché en MicroRM
+# Redis en MicroRM
 
 ## Resumen
 
-- **Redis 7** en Docker guarda en memoria las respuestas de **catálogos** (tipos de documento, sexos, EPS, sitios anatómicos, tipos de muestra).
-- La API usa **Spring Cache** con `RedisCacheManager` y TTL configurable.
-- Con `REDIS_ENABLED=false` no se conecta a Redis; `@Cacheable` no aplica (misma idea que Kafka con `KAFKA_ENABLED`).
+- **Redis 7** en Docker: la API abre conexión (`LettuceConnectionFactory`) cuando `REDIS_ENABLED=true` (salud en actuator y base para uso futuro).
+- **No** se usa Spring Cache sobre catálogos: serializar `List` de records (`CatalogoItemResponse`) en Redis provocaba **500** al navegar entre pantallas.
+- Con `REDIS_ENABLED=false` no se conecta a Redis (misma idea que Kafka con `KAFKA_ENABLED`).
 
 ## Arranque (Docker)
 
@@ -19,29 +19,14 @@ La API espera a que `redis` esté healthy antes de arrancar.
 
 ## Desarrollo local sin Redis
 
-En `application.properties` o variables de entorno:
-
 ```properties
 REDIS_ENABLED=false
 ```
-
-## Cachés
-
-| Caché | Endpoint |
-|--------|----------|
-| `catalogo:sitios` | `GET /api/v1/catalogos/sitios-anatomicos` |
-| `catalogo:tipos-muestra` | `GET /api/v1/catalogos/tipos-muestra` |
-| `catalogo:tipos-documento` | `GET /api/v1/catalogos/tipos-documento` |
-| `catalogo:sexos` | `GET /api/v1/catalogos/sexos` |
-| `catalogo:eps` | `GET /api/v1/catalogos/eps` |
-
-Claves Redis: prefijo `microrm:` + nombre del caché.
 
 ## Variables
 
 | Variable | Descripción |
 |----------|-------------|
-| `REDIS_ENABLED` | Activa caché Redis en la API |
+| `REDIS_ENABLED` | Activa conexión Redis en la API |
 | `REDIS_HOST` | Host de Redis |
 | `REDIS_PORT` | Puerto (6379) |
-| `REDIS_CACHE_TTL_SECCONDS` | TTL en segundos (por defecto 3600) |

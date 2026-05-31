@@ -13,9 +13,6 @@ public class MicrormCacheProperties {
 
 	private String password = "";
 
-	/** TTL por defecto para entradas de catálogo (segundos). */
-	private long defaultTtlSeconds = 3600;
-
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -46,14 +43,6 @@ public class MicrormCacheProperties {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public long getDefaultTtlSeconds() {
-		return defaultTtlSeconds;
-	}
-
-	public void setDefaultTtlSeconds(long defaultTtlSeconds) {
-		this.defaultTtlSeconds = defaultTtlSeconds;
 	}
 
 }
